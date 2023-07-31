@@ -1,3 +1,5 @@
+console.log("Heroku work!");
+
 const express = require("express");
 const session = require("express-session");
 const filestore = require("session-file-store")(session);
