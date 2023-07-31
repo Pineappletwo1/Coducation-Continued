@@ -15,7 +15,6 @@ const app = express();
 const publicPath = path.join(__dirname, "public");
 
 // Serve static files from the 'public' folder
-app.use(express.static(publicPath));
 app.use(cookieParser());
 app.use(cors());
 dotenv.config();
