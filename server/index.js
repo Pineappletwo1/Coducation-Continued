@@ -28,10 +28,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Redirect users to 'index.html' when accessing the root URL
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.get("/autoRedirect", async (req, res) => {
   console.log("autoredirect has been called");
   const user = await User.findOne({
