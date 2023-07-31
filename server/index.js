@@ -14,9 +14,9 @@ mongoose.set("strictQuery", false);
 const app = express();
 
 // Serve static files from the 'public' folder
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.use(express.static(path.resolve(__dirname, "../client/public")));
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "../client/publc", "index.html"));
 });
 app.use(cookieParser());
 app.use(cors());
