@@ -10,7 +10,6 @@ const emailContent = require("./data/email");
 const cors = require("cors");
 const lessons = require("./data/lessons");
 const User = require("./models/users");
-
 mongoose.set("strictQuery", false);
 const app = express();
 const publicPath = path.join(__dirname, "public");
