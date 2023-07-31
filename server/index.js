@@ -14,10 +14,7 @@ mongoose.set("strictQuery", false);
 const app = express();
 
 // Serve static files from the 'public' folder
-app.use(express.static(path.resolve(__dirname, "../client/public")));
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/publc", "index.html"));
-});
+
 app.use(cookieParser());
 app.use(cors());
 dotenv.config();
@@ -69,14 +66,14 @@ app.put("/users/update", async (req, res) => {
 });
 
 // Start the server on port 3000 (or any other desired port)
-const port = 5000;
+const PORT = process.env.PORT || 3001;
 
 const start = async () => {
   try {
     await mongoose.connect(process.env.MONGODBKEY);
-    app.listen(port, () => {
+    app.listen(PORT, () => {
       console.log("Mongoose is running!");
-      console.log(`Application is running at localhost:${port}`);
+      console.log(`Application is running at localhost:${PORT}`);
     });
   } catch (e) {
     console.log(e);
@@ -215,7 +212,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "lockemaximus@gmail.com",
-    pass: "oitypoptwdtsdrtu",
+    pass: process.env.EMAILPASSWORD,
   },
 });
 
@@ -313,4 +310,9 @@ app.post("/quiz", (req, res) => {
   const unit = section.units.filter((unit) => unit.ref == unitName)[0];
   const lesson = unit.lessons.filter((lesson) => lesson.ref == lessonName)[0];
   res.send({ questions: lesson.questions });
+});
+
+app.use(express.static(path.resolve(__dirname, "../public/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
