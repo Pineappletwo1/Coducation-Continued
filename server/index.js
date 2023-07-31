@@ -12,32 +12,22 @@ const lessons = require("./data/lessons");
 const User = require("./models/users");
 mongoose.set("strictQuery", false);
 const app = express();
-const publicPath = path.join(__dirname, "public");
 
 // Serve static files from the 'public' folder
+app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
 app.use(cookieParser());
 app.use(cors());
 dotenv.config();
 
-app.use(
-  session({
-    name: "session-id",
-    secret: "yanjiaIsReallyAnnoying!", // Secret key,
-    saveUninitialized: false,
-    resave: false,
-    store: new filestore(),
-  })
-);
 // Parse JSON data from request body
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Redirect users to 'index.html' when accessing the root URL
-app.get("/", async (req, res) => {
-  console.log("asdf");
-  res.redirect("/index.html");
-});
 
 app.get("/autoRedirect", async (req, res) => {
   console.log("autoredirect has been called");
@@ -77,60 +67,6 @@ app.put("/users/update", async (req, res) => {
   user.image = data.image;
   await user.save();
 });
-
-// -------------------- No more ugly .html files -----------------
-app.get("/dashboard", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
-});
-
-app.get("/account", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "account.html"));
-});
-
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-
-app.get("/signup", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "signup.html"));
-});
-
-app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "signup.html"));
-});
-
-app.get("/terms", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "terms.html"));
-});
-
-app.get("/dashboard", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
-});
-
-app.get("/python-course", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "python-course", "index.html"));
-});
-
-app.get("/javascript-course", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "javascript-course", "index.html")
-  );
-});
-
-app.get("/javascript-quiz", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "javascript-course", "jsquiz.html")
-  );
-});
-
-app.get("/games", (req, res) => {
-  res.redirect("/games.html");
-});
-
-app.get("/privacy", (req, res) => {
-  res.redirect("/privacy.html");
-});
-//---------------------------------------------------------------
 
 // Start the server on port 3000 (or any other desired port)
 const port = 5000;
