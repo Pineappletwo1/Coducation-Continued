@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd server && node index.js"
+    "start": "cd server && node index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.7",
