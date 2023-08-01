@@ -3,11 +3,11 @@ import Footer from "../components/Footer";
 import fccLogo from "../assets/decorationImages/fcc.png";
 import pythonLogo from "../assets/decorationImages/pythonlogo.png";
 import React, { useEffect, useState } from "react";
-import { autoRedirect } from "../security";
+import { functions } from "../security";
 
 export default function Home() {
   useEffect(() => {
-    autoRedirect();
+    functions.autoRedirect();
   }, []);
   return (
     <>

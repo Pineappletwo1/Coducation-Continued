@@ -1,10 +1,10 @@
-module.exports = {
+const functions = {
   kickOut: async function () {
     document.body.style.filter = "blur(3px)";
     const response = await fetch("/kick");
     let url = await response.json();
     console.log(url.message);
-    if (url.message != "clear") {
+    if (url.message !== "clear") {
       window.location = url.message;
     } else {
       document.body.style.filter = "blur(0px)";
@@ -17,3 +17,5 @@ module.exports = {
     window.location = url.message;
   },
 };
+
+export { functions };

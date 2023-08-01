@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Prism from "prismjs";
 import "prismjs/components/prism-javascript";
 import "../code.css";
-import { kickOut } from "../security";
+import { functions } from "../security";
 
 export default function Lesson() {
   const { courseName, sectionName, unitName, lessonName } = useParams();
@@ -96,7 +96,7 @@ export default function Lesson() {
     });
   }
   async function start() {
-    await kickOut();
+    await functions.kickOut();
     await getLessonData();
     setContentLoaded(true);
   }

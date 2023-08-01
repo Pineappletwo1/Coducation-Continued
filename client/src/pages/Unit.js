@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { kickOut } from "../security";
+import { functions } from "../security";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -40,7 +40,7 @@ export default function Unit() {
     });
   }
   useEffect(() => {
-    kickOut();
+    functions.kickOut();
     getUnitInfo();
   }, []);
   return (

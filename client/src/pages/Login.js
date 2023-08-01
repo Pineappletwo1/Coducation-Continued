@@ -1,11 +1,11 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import React, { useRef, useEffect } from "react";
-import { autoRedirect } from "../security";
+import { functions } from "../security";
 
 export default function Login() {
   useEffect(() => {
-    autoRedirect();
+    functions.autoRedirect();
   }, []);
   const usernameRef = useRef();
   const passwordRef = useRef();

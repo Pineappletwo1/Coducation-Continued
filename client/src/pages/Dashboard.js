@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import security from "../security";
+import { functions } from "../security";
 import images from "../assets/courseImages/images";
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
   const [message, setMessage] = useState("");
   useEffect(() => {
     console.log("kicking out");
-    security.kickOut();
+    functions.kickOut();
     getLessons();
   }, []);
   return (

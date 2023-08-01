@@ -1,19 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { kickOut } from "../security";
+import { functions } from "../security";
 
 export default function Account() {
-  useEffect(() => {
-    kickOut();
-  }, []);
   function checkImage(url) {
     var request = new XMLHttpRequest();
     request.open("GET", url, true);
     request.send();
-    let fdsa = request;
     request.onload = function () {
-      if (request.status == 200) {
+      if (request.status === 200) {
         document.querySelectorAll("img")[1].src = url;
       } else {
         document.querySelectorAll("img")[1].src =
@@ -42,18 +38,19 @@ export default function Account() {
   }
   useEffect(() => {
     getUserData();
+    functions.kickOut();
   }, []);
   function update() {
     if (
-      usernameInput.current.value != "" &&
-      passwordInput.current.value != "" &&
-      descriptionInput.current.value != "" &&
-      imageUrlInput.current.value != ""
+      usernameInput.current.value !== "" &&
+      passwordInput.current.value !== "" &&
+      descriptionInput.current.value !== "" &&
+      imageUrlInput.current.value !== ""
     ) {
       const requirment = window.confirm(
         "Are you sure you want to update your account?"
       );
-      if (requirment == true) {
+      if (requirment === true) {
         fetch("/users/update", {
           method: "put",
           headers: { "Content-Type": "application/json" },
@@ -104,7 +101,7 @@ export default function Account() {
         <div style={{ flex: "1 1 250px" }}>
           <img
             src={
-              typeof userInfo.image == "string"
+              typeof userInfo.image === "string"
                 ? userInfo.image
                 : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             }

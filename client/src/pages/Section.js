@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { kickOut } from "../security";
+import { functions } from "../security";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import images from "../assets/courseImages/images";
@@ -46,7 +46,7 @@ export default function Section() {
     });
   }
   useEffect(() => {
-    kickOut();
+    functions.kickOut();
     getSectionInfo();
   }, []);
   return (
