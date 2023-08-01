@@ -23,7 +23,7 @@ module.exports = {
       <h1>Thank you for signing up for Coducation!</h1>
               <h2 style="margin-top: 0rem">You are one step away from confirming your account and preventing its deletion.</h2>
               <h3 style="margin-bottom: 4rem;">Please note signing up this means you agree to our Terms of Service and Privacy Policy</h3>
-              <a style="background:rgb(0, 102, 255);text-decoration: none;padding:1rem;color:white;border-radius: 10px;" href="coducation.tech/users/confirm/`,
+              <a style="background:rgb(0, 102, 255);text-decoration: none;padding:1rem;color:white;border-radius: 10px;" href="home.coducation.tech/users/confirm/`,
   partTwo: `" style="margin-bottom: 300px;">Press me to signup</a>
           </div>
           <footer style="background: #0c212c; margin-top: 30vh">

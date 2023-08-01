@@ -109,10 +109,10 @@ app.post("/users/signup", async (req, res) => {
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
       console.log(user.code, "code");
       res.cookie("Email", user.email);
-      res.redirect("/confirmation.html");
+      res.redirect("/confirmation");
       try {
         let emailData = {
-          from: "lockemaximus@gmail.com",
+          from: process.env.EMAIL,
           to: req.body.email,
           subject: "Coducation Signup",
           html: emailContent.partOne + user.id + emailContent.partTwo,
@@ -213,7 +213,7 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "lockemaximus@gmail.com",
+    user: process.env.EMAIL,
     pass: process.env.EMAILPASSWORD,
   },
 });
@@ -318,3 +318,11 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+
+let emailData = {
+  from: process.env.EMAIL,
+  to: "lockemaximus@gmail.com",
+  subject: "Coducation Signup",
+  html: emailContent.partOne + emailContent.partTwo,
+};
+sendEmail(emailData);
