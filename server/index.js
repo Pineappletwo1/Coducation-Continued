@@ -318,11 +318,3 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
-
-let emailData = {
-  from: process.env.EMAIL,
-  to: "lockemaximus@gmail.com",
-  subject: "Coducation Signup",
-  html: emailContent.partOne + emailContent.partTwo,
-};
-sendEmail(emailData);
