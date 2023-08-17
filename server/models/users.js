@@ -72,6 +72,9 @@ const userSchema = new mongoose.Schema({
   sessionExpiration: {
     type: Number,
   },
+  expiredSessionId: {
+    type: Number,
+  },
   image: {
     type: String,
     default:
@@ -82,11 +85,13 @@ const userSchema = new mongoose.Schema({
     default:
       'I was once bored watching YouTube videos when learning how to code, thinking to myself: "There has to be an easier way!" And once I discovered Coducation it all changed. Now I can create full-stack applications and I feel so powerful!',
   },
+  beginner: {
+    type: Boolean,
+    default: true,
+  },
   currentCourses: {
-    type: Object,
-    default: {
-      javascriptFullCourse: false,
-    },
+    type: Array,
+    default: [],
   },
 });
 

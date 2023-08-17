@@ -1,13 +1,16 @@
 const functions = {
   kickOut: async function () {
-    document.body.style.filter = "blur(3px)";
     const response = await fetch("/kick");
-    let url = await response.json();
-    console.log(url.message);
-    if (url.message !== "clear") {
-      window.location = url.message;
+    let data = await response.json();
+    console.log(data);
+    if (data.message === "expired") {
+      alert("Your session has expired. Please login again.");
+      window.location = "/login";
+    } else if (data.message === "kick") {
+      alert("Intruder alert!");
+      window.location = "/login";
     } else {
-      document.body.style.filter = "blur(0px)";
+      console.log("clear");
     }
   },
   autoRedirect: async function () {

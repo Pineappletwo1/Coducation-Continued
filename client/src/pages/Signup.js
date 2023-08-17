@@ -1,9 +1,12 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import styles from "../styles/Login.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
 export default function Signup() {
   return (
-    <div className="section1">
+    <>
       <Navbar
         one={{
           function: () => {
@@ -18,55 +21,32 @@ export default function Signup() {
           text: "Sign Up",
         }}
       />
-      <h1 style={{ margin: "2rem" }}>Signup</h1>
       <form action="/users/signup" method="post">
-        <div className="login">
-          <div className="loginSection">
-            <label htmlFor="username" className="loginLabel">
-              Username:
-            </label>
-            <br />
-            <input
-              type="text"
-              id="username"
-              name="username"
-              required
-              className="loginInput"
-            />
+        <div className={styles.loginContainer}>
+          <div className={styles.loginSection}>
+            <div className={styles.login}>
+              <h1>Signup</h1>
+              <div className={styles.input}>
+                <FontAwesomeIcon icon={faUser} style={{ flexGrow: 0 }} />
+                <input type="text" placeholder="Username" name="username" />
+              </div>
+              <div className={styles.input}>
+                <FontAwesomeIcon icon={faEnvelope} style={{ flexGrow: 0 }} />
+                <input type="email" placeholder="Email" name="email" required />
+              </div>
+              <div className={styles.input}>
+                <FontAwesomeIcon icon={faLock} style={{ flexGrow: 0 }} />
+                <input type="password" placeholder="Password" name="password" />
+              </div>
+              <button type="submit" className={styles.loginButton}>
+                Signup
+              </button>
+            </div>
           </div>
-          <div className="loginSection">
-            <label htmlFor="password" className="loginLabel">
-              Password:
-            </label>
-            <br />
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              className="loginInput"
-            />
-          </div>
-          <div className="loginSection">
-            <label htmlFor="email" className="loginLabel">
-              Email:
-            </label>
-            <br />
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              className="loginInput"
-            />
-          </div>
-          <br />
-          <button className="loginSubmit hoverable" type="submit" id="margin">
-            Signup
-          </button>
+          <div className={styles.decoration} />
         </div>
       </form>
-      <Footer />
-    </div>
+      <Footer style={{ marginTop: "0px" }} />
+    </>
   );
 }

@@ -29,15 +29,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Redirect users to 'index.html' when accessing the root URL
 
 app.get("/autoRedirect", async (req, res) => {
-  console.log("autoredirect has been called");
   const user = await User.findOne({
     email: req.cookies["Email"],
     sessionId: req.cookies["sessionId"],
     activated: true,
   });
-  if (user) {
-    console.log(user.email, "from autoredirect");
-    console.log("directing");
+  if (user && Date.now() < user.sessionExpiration) {
     res.send({ message: "/dashboard" });
   }
 });
@@ -135,9 +132,9 @@ app.post("/users/login", async (req, res) => {
     const user = await User.findOne({ username, password, email });
     if (user && user.activated === true) {
       user.sessionId = code() + code();
-      user.sessionExpiration = Date.now() + 3600000;
+      user.sessionExpiration = Date.now() + 60000;
       res.cookie("sessionId", user.sessionId, {
-        maxAge: 3600000,
+        maxAge: 36000000000,
         httpOnly: true,
       });
       res.cookie("Email", user.email);
@@ -201,7 +198,7 @@ app.get("/users/confirm/:id", async (req, res) => {
 
 const test = async () => {
   const result = await User.find();
-  result.forEach((user) => {
+  result.forEach(async (user) => {
     console.log(user.email, user.activated, user.id);
   });
 };
@@ -246,52 +243,31 @@ setInterval(async () => {
   }
 }, 3600000);
 
-app.post("/quiz/javascript", (req, res) => {
-  const answers = req.body;
-  console.log(answers, "the body");
-  if (answers === "Get Report") {
-    console.log("He wants report!");
-  }
-  console.log(answers, "these are the answers");
-  talley = 0;
-  report = {};
-  for (let i = 1; i <= 4; i++) {
-    report["question" + i] = {};
-    report["question" + i]["chosenAnswer"] = answers["question" + i];
-    report["question" + i]["correctAnswer"] = jsAnswers["question" + i];
-    if (answers["question" + i] === jsAnswers["question" + i]) {
-      talley++;
-    }
-  }
-  console.log(talley);
-  console.log(report);
-  res.redirect("/javascript-course/jsScore.html");
-});
-
-app.get("/jsquiz", (req, res) => {
-  res.redirect("/javascript-course/jsquiz.html");
-});
-
-app.get("/js/data", async (req, res) => {
-  const user = await User.findOne({
-    email: req.cookies["Email"],
-    sessionId: req.cookies["sessionId"],
-  });
-  if (user) {
-    res.send({ message: user.javascriptProgress });
-  }
-});
-
 app.get("/kick", async (req, res) => {
-  const user = await User.findOne({
-    email: req.cookies["Email"],
-    sessionId: req.cookies["sessionId"],
-    activated: true,
-  });
-  if (!user) {
-    res.send({ message: "/login" });
-  } else {
-    res.send({ message: "clear" });
+  try {
+    const user = await User.findOne({
+      email: req.cookies["Email"],
+      activated: true,
+    });
+    if (!user) {
+      res.send({ message: "kick" });
+    }
+    if (user) {
+      if (user.sessionId === req.cookies["sessionId"]) {
+        if (user.sessionExpiration < Date.now()) {
+          res.send({ message: "expired" });
+        } else {
+          res.send({ message: "clear" });
+          user.sessionExpiration = Date.now() + 300000;
+          await user.save();
+        }
+      } else {
+        res.send({ message: "kick" });
+      }
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({ message: "kick" });
   }
 });
 
@@ -299,8 +275,23 @@ app.get("/testing", (req, res) => {
   console.log("called test");
 });
 
-app.get("/lessons", (req, res) => {
-  res.send({ lessons });
+app.post("/lessons", (req, res) => {
+  switch (req.body.info) {
+    case "lessonTitles": {
+      res.send({
+        lessons: lessons.map((lesson) => ({
+          title: lesson.title,
+          description: lesson.description,
+          img: lesson.img,
+          ref: lesson.ref,
+        })),
+      });
+      break; // Don't forget to include a break statement here
+    }
+    default:
+      res.status(400).send("Invalid request");
+      break;
+  }
 });
 
 app.post("/quiz", (req, res) => {
@@ -312,6 +303,18 @@ app.post("/quiz", (req, res) => {
   const unit = section.units.filter((unit) => unit.ref == unitName)[0];
   const lesson = unit.lessons.filter((lesson) => lesson.ref == lessonName)[0];
   res.send({ questions: lesson.questions });
+});
+
+app.get("/users/beginner", async (req, res) => {
+  const user = await User.findOne({
+    email: req.cookies["Email"],
+    sessionId: req.cookies["sessionId"],
+    activated: true,
+  });
+  if (user) {
+    user.beginner = false;
+    await user.save();
+  }
 });
 
 app.use(express.static(path.resolve(__dirname, "../client/build")));

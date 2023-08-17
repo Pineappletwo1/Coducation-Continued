@@ -1,110 +1,91 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { functions } from "../security";
+import styles from "../styles/Login.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login() {
   useEffect(() => {
     functions.autoRedirect();
   }, []);
+
   const usernameRef = useRef();
-  const passwordRef = useRef();
   const emailRef = useRef();
-  const loginRef = useRef();
+  const passwordRef = useRef();
+
   async function submit(event) {
     event.preventDefault();
     const username = usernameRef.current.value;
-    const password = passwordRef.current.value;
     const email = emailRef.current.value;
-    console.log(username, password, email);
+    const password = passwordRef.current.value;
+    console.log(username, email, password);
+
     const response = await fetch("/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password, email }),
+      body: JSON.stringify({ username, email, password }),
     });
+
     const data = await response.json();
+
     if (response.ok) {
       window.location.href = "/dashboard";
       alert("You have successfully logged in!");
     } else {
       alert(data.error);
-      window.location.href = "/fail.html";
     }
   }
+
   return (
     <>
-      <div className="section1">
-        <Navbar
-          one={{
-            function: () => {
-              window.location = "/login";
-            },
-            text: "Login",
-          }}
-          two={{
-            function: () => {
-              window.location = "/signup";
-            },
-            text: "Sign Up",
-          }}
-        />
-        <h1 style={{ margin: "2rem" }}>Login</h1>
-        <form onSubmit={submit}>
-          <div className="login">
-            <div className="loginSection">
-              <label htmlFor="username" className="loginLabel">
-                Username:
-              </label>
-              <br />
-              <input
-                type="text"
-                ref={usernameRef}
-                name="username"
-                required
-                className="loginInput"
-              />
+      <Navbar
+        one={{
+          function: () => {
+            window.location = "/login";
+          },
+          text: "Login",
+        }}
+        two={{
+          function: () => {
+            window.location = "/signup";
+          },
+          text: "Sign Up",
+        }}
+      />
+      <form onSubmit={submit}>
+        <div className={styles.loginContainer}>
+          <div className={styles.loginSection}>
+            <div className={styles.login}>
+              <h1>Login</h1>
+              <div className={styles.input}>
+                <FontAwesomeIcon icon={faUser} style={{ flexGrow: 0 }} />
+                <input type="text" placeholder="Username" ref={usernameRef} />
+              </div>
+              <div className={styles.input}>
+                <FontAwesomeIcon icon={faEnvelope} style={{ flexGrow: 0 }} />
+                <input type="text" placeholder="Email" ref={emailRef} />
+              </div>
+              <div className={styles.input}>
+                <FontAwesomeIcon icon={faLock} style={{ flexGrow: 0 }} />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  ref={passwordRef}
+                />
+              </div>
+              <button type="submit" className={styles.loginButton}>
+                Login
+              </button>
             </div>
-            <div className="loginSection">
-              <label htmlFor="password" className="loginLabel">
-                Password:
-              </label>
-              <br />
-              <input
-                type="password"
-                ref={passwordRef}
-                name="password"
-                required
-                className="loginInput"
-              />
-            </div>
-            <div className="loginSection">
-              <label htmlFor="email" className="loginLabel">
-                Email:
-              </label>
-              <br />
-              <input
-                type="email"
-                ref={emailRef}
-                name="email"
-                required
-                className="loginInput"
-              />
-            </div>
-            <br />
-            <button
-              className="loginSubmit hoverable"
-              type="submit"
-              id="margin"
-              ref={loginRef}
-            >
-              Login
-            </button>
           </div>
-        </form>
-        <Footer />
-      </div>
+          <div className={styles.decoration} />
+        </div>
+      </form>
+      <Footer style={{ marginTop: "0px" }} />
     </>
   );
 }
