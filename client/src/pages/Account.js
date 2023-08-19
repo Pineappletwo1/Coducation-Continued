@@ -2,22 +2,34 @@ import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { functions } from "../security";
+import styles from "../styles/Account.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSpinner,
+  faUser,
+  faLock,
+  faEnvelope,
+  faBook,
+  faImage,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Account() {
   function checkImage(url) {
-    var request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.send();
-    request.onload = function () {
-      if (request.status === 200) {
-        document.querySelectorAll("img")[1].src = url;
-      } else {
-        document.querySelectorAll("img")[1].src =
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-        alert("Image cannot be found!!!");
-      }
+    var img = new Image();
+    img.src = url;
+    console.log(img);
+    img.onload = function () {
+      setImage(url);
+    };
+    img.onerror = function () {
+      setImage(
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+      );
+      alert("Image could not be loaded.");
     };
   }
+  const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(true);
   const usernameInput = useRef();
   const passwordInput = useRef();
   const descriptionInput = useRef();
@@ -35,10 +47,13 @@ export default function Account() {
       image: data.message.image,
     }));
     checkImage(data.message.image);
+    setLoading(false);
   }
   useEffect(() => {
-    getUserData();
-    functions.kickOut();
+    (async () => {
+      await functions.kickOut();
+      getUserData();
+    })();
   }, []);
   function update() {
     if (
@@ -72,7 +87,7 @@ export default function Account() {
     }
   }
   return (
-    <div className="section1">
+    <div>
       <Navbar
         one={{
           function: () => {
@@ -91,95 +106,73 @@ export default function Account() {
           text: "Dashboard",
         }}
       />
-      <div style={{ margin: "1rem" }}>
-        <h1 className="hoverable">Welcome to your account page.</h1>
-        <h3 className="hoverable">
-          Here you can view your account settings and alter your profile.
-        </h3>
-      </div>
-      <div className="hero">
-        <div style={{ flex: "1 1 250px" }}>
-          <img
-            src={
-              typeof userInfo.image === "string"
-                ? userInfo.image
-                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-            }
-            alt="No image has been provided"
-            style={{
-              maxWidth: "600px",
-              maxHeight: "600px",
-              width: "100%",
-              borderRadius: "10%",
-            }}
-            className="hoverable"
-          />
-        </div>
-        <div style={{ margin: "1rem", flex: "1 1 250px" }}>
-          <h1 className="hoverable">{userInfo.username}</h1>
-          <h2 style={{ color: "grey" }} className="hoverable">
-            {userInfo.email}
-          </h2>
-          <h2 className="hoverable" style={{ width: "90%" }}>
-            {userInfo.desc}
-          </h2>
-        </div>
-      </div>
-      <div style={{ margin: "1rem" }}>
-        <h1>Update new user info:</h1>
-        <div className="loginSection">
-          <label htmlFor="usernameInput" className="loginLabel">
-            Username
-          </label>
-          <input
-            defaultValue={userInfo.username}
-            type="text"
-            className="loginInput"
-            ref={usernameInput}
-            placeholder={userInfo.username}
-          />
-        </div>
-        <div className="loginSection">
-          <label htmlFor="passwordInput" className="loginLabel">
-            Password
-          </label>
-          <input
-            defaultValue={userInfo.password}
-            type="password"
-            ref={passwordInput}
-            placeholder={userInfo.password}
-            className="loginInput"
-          />
-        </div>
-        <div className="loginSection">
-          <label htmlFor="descriptionInput" className="loginLabel">
-            Description
-          </label>
-          <input
-            defaultValue={userInfo.desc}
-            type="text"
-            ref={descriptionInput}
-            className="loginInput"
-            placeholder={userInfo.desc}
-          />
-        </div>
-        <div className="loginSection">
-          <label htmlFor="imageUrl" className="loginLabel">
-            Image
-          </label>
-          <input
-            defaultValue={userInfo.image}
-            type="text"
-            className="loginInput"
-            ref={imageUrlInput}
-            placeholder={userInfo.image}
-          />
-        </div>
-        <button className="loginSubmit" onClick={update}>
-          Update
-        </button>
-      </div>
-      <Footer />
+      {loading === true ? (
+        <FontAwesomeIcon className="spinner" icon={faSpinner} spin />
+      ) : (
+        <>
+          <div className={styles.accountContainer}>
+            <div className={styles.profile}>
+              <img
+                src={image}
+                alt="Image could not be loaded."
+                className={styles.profileImage}
+              />
+              <div className={styles.profileInfo}>
+                <h1>{userInfo.username}</h1>
+                <h2>{userInfo.email}</h2>
+                <h2>{userInfo.desc}</h2>
+              </div>
+            </div>
+            <div className={styles.profileEdit}>
+              <div className={styles.profileEditBox}>
+                <h1 className={styles.profileEditHeader}>
+                  Update new user info:
+                </h1>
+                <div className={styles.input}>
+                  <FontAwesomeIcon icon={faUser} style={{ flexGrow: 0 }} />
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    ref={usernameInput}
+                    defaultValue={userInfo.username}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <FontAwesomeIcon icon={faLock} style={{ flexGrow: 0 }} />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    ref={passwordInput}
+                    defaultValue={userInfo.password}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <FontAwesomeIcon icon={faBook} style={{ flexGrow: 0 }} />
+                  <input
+                    type="text"
+                    placeholder="Description"
+                    ref={descriptionInput}
+                    defaultValue={userInfo.desc}
+                  />
+                </div>
+                <div className={styles.input}>
+                  <FontAwesomeIcon icon={faBook} style={{ flexGrow: 0 }} />
+                  <input
+                    type="text"
+                    placeholder="Profile Picture (URL)"
+                    ref={imageUrlInput}
+                    defaultValue={userInfo.image}
+                  />
+                </div>
+                <button className={styles.profileEditButton} onClick={update}>
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+          <Footer />
+        </>
+      )}
     </div>
   );
 }

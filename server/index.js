@@ -281,8 +281,8 @@ app.post("/lessons", (req, res) => {
       res.send({
         lessons: lessons.map((lesson) => ({
           title: lesson.title,
-          description: lesson.description,
-          img: lesson.img,
+          description: lesson.shortDescription,
+          img: lesson.image,
           ref: lesson.ref,
         })),
       });

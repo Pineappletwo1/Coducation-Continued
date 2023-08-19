@@ -44,6 +44,7 @@ export default function App() {
           path="/unit/:courseName/:sectionName/:unitName"
           element={<Unit />}
         />
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

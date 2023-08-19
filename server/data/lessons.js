@@ -9,6 +9,8 @@ module.exports = [
     title: "Javascript Full Course",
     description:
       "Javascript is a great coding language with many uses. This course will help you get through vanilla JavaScript fundamentals all the way into modern ES6 syntax and advanced DOM manipulation and some HTML canvas. This course will not use any JavaScript libraries or frameworks and is 100% static.",
+    shortDescription:
+      "Learn the basics of JavaScript, the language that powers the web.",
     image: "javascriptfullcourse",
     intro: {
       hook: 'Welcome to the world of "JavaScript"!',
@@ -43,6 +45,8 @@ module.exports = [
     title: "HTML Essentials",
     description:
       "HTML is a fundamental markup language for building web pages. In this course, you'll learn the essential concepts of HTML, including how to create elements, structure your content, and use semantic tags. Understanding HTML is crucial for every web developer, as it forms the backbone of any website. By the end of this course, you'll have a solid foundation in HTML and be ready to enhance your web development skills with CSS and JavaScript.",
+    shortDescription:
+      "Learn the basics of HTML, the language that builds your websites.",
     image: "htmlessentials",
     intro: {
       hook: 'Discover the power of "HTML Essentials"!',
@@ -77,6 +81,8 @@ module.exports = [
     title: "CSS Fundamentals",
     description:
       "CSS (Cascading Style Sheets) is a powerful styling language that complements HTML. This course will teach you the basics of CSS, including how to apply styles to your web pages, control layout, and create responsive designs. By mastering CSS, you'll be able to transform plain HTML documents into visually appealing and interactive websites.",
+    shortDescription:
+      "Learn the basics of CSS, the language that adds styles to your websites.",
     image: "cssfundamentals",
     intro: {
       hook: 'Unleash your creativity with "CSS Fundamentals"!',

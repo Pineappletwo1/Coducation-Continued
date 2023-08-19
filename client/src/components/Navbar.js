@@ -45,17 +45,12 @@ export default function Navbar(props) {
         <div
           className="navItem navRight"
           style={{ marginLeft: "auto", marginRight: "1rem" }}
-          onClick={() => {
-            window.location = "/login";
-          }}
+          onClick={props.one.function}
         >
-          Login
+          {props.one.text}
         </div>
-        <div
-          className="navItem navRight"
-          onClick={() => (window.location = "/signup")}
-        >
-          Signup
+        <div className="navItem navRight" onClick={props.two.function}>
+          {props.two.text}
         </div>
         <div className="navMenuIcon" onClick={revealNavMenu}>
           <div className="menuLine"></div>
