@@ -86,3 +86,19 @@
 .profileEditButton:hover {
   transform: translateY(-10px);
 }
+
+.profileUsername {
+  font-size: 2rem;
+  margin-bottom: -0.5rem;
+}
+
+.profileEmail {
+  font-size: 1.2rem;
+  color: rgb(62, 62, 62);
+  margin-bottom: 1rem;
+}
+
+.profileDesc {
+  font-size: 1.2rem;
+  line-height: 1.7rem;
+}

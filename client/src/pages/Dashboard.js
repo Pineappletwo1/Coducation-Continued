@@ -138,7 +138,9 @@ export default function App() {
                   }}
                 />
               </div>
-              {user.currentCourses.length === 0 ? (
+              {user.currentCourses.length !== 0 ? (
+                <h1>Continue with Learning</h1>
+              ) : (
                 <>
                   <h1 className={styles.discoverTitle}>Discover courses</h1>
                   <div className={styles.discover}>
@@ -163,10 +165,6 @@ export default function App() {
                     })}
                   </div>
                 </>
-              ) : (
-                <div>
-                  <h1>Continue your Learning</h1>
-                </div>
               )}
             </div>
           </div>

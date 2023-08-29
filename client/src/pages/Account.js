@@ -118,9 +118,9 @@ export default function Account() {
                 className={styles.profileImage}
               />
               <div className={styles.profileInfo}>
-                <h1>{userInfo.username}</h1>
-                <h2>{userInfo.email}</h2>
-                <h2>{userInfo.desc}</h2>
+                <h1 className={styles.profileUsername}>{userInfo.username}</h1>
+                <h2 className={styles.profileEmail}>{userInfo.email}</h2>
+                <h2 className={styles.profileDesc}>{userInfo.desc}</h2>
               </div>
             </div>
             <div className={styles.profileEdit}>

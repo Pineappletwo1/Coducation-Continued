@@ -277,17 +277,45 @@ app.get("/testing", (req, res) => {
 
 app.post("/lessons", (req, res) => {
   switch (req.body.info) {
-    case "lessonTitles": {
-      res.send({
-        lessons: lessons.map((lesson) => ({
-          title: lesson.title,
-          description: lesson.shortDescription,
-          img: lesson.image,
-          ref: lesson.ref,
-        })),
-      });
+    case "lessonTitles":
+      {
+        res.send({
+          lessons: Object.keys(lessons).map((key) => ({
+            title: lessons[key].title,
+            description: lessons[key].shortDescription,
+            img: lessons[key].image,
+            ref: lessons[key].ref,
+          })),
+        });
+      }
       break; // Don't forget to include a break statement here
-    }
+    case "courseInfo":
+      {
+        res.send({
+          description: lessons[req.body.course].intro.description,
+          title: lessons[req.body.course].title,
+          image: lessons[req.body.course].intro.imageSrc,
+          shortDescription: lessons[req.body.course].shortDescription,
+          about: lessons[req.body.course].intro.about,
+          sections: Object.keys(lessons[req.body.course].intro.sections).map(
+            (key) => ({
+              title: lessons[req.body.course].intro.sections[key].title,
+              description:
+                lessons[req.body.course].intro.sections[key].description,
+              ref: lessons[req.body.course].intro.sections[key].ref,
+              img: lessons[req.body.course].intro.sections[key].image,
+            })
+          ),
+        });
+      }
+      break;
+    case "sectionInfo":
+      {
+        res.send({
+          info: lessons[req.body.courseName].intro.sections[req.body.section],
+        });
+      }
+      break;
     default:
       res.status(400).send("Invalid request");
       break;

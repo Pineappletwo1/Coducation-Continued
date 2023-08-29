@@ -1,126 +1,98 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { kickOut } from "../security";
-import Navbar from "../components/Navbar";
+import { functions } from "../security";
+import DashboardNavbar from "../components/DashboardNavbar";
 import Footer from "../components/Footer";
 import images from "../assets/courseImages/images";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import styles from "../styles/Course.module.css";
 
 export default function Course() {
   const { courseName } = useParams();
   const [courseInfo, setCourseInfo] = useState({});
+  const [loading, setLoading] = useState(true);
   async function getCourseInfo() {
-    const res = await fetch("/lessons");
+    const res = await fetch("/lessons", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ info: "courseInfo", course: courseName }),
+    });
     const data = await res.json();
-    const course = data.lessons.filter((lesson) => lesson.ref == courseName)[0];
-    console.log(course);
-    setCourseInfo(() => ({
-      title: course.title,
-      description: course.intro.description,
-      hook: course.intro.hook,
-      image: course.intro.imageSrc,
-      language: course.language,
-      curriculum: course.intro.curriculum,
-      sections: course.intro.sections.map((section) => (
-        <div className="lessonCard">
-          <img
-            className="lessonCardImg"
-            src={images[course.ref].sectionImages[section.image]}
-            alt=""
-          />
-          <h1 className="hoverable">{section.title}</h1>
-          <h2 className="hoverable">{section.description}</h2>
-          <button
-            className="hoverable"
-            onClick={() => {
-              window.location = `/section/${courseName}/${section.ref}`;
-            }}
-          >
-            Enroll
-          </button>
-        </div>
-      )),
-      reasonsToLearn: course.intro.reasonsToLearn.map((reason) => (
-        <div className="reason" style={{ flex: "1 1 400px" }}>
-          <h1 className="hoverable">{reason.title}</h1>
-          <h2 className="hoverable">{reason.description}</h2>
-        </div>
-      )),
-    }));
+    console.log(data.sections, typeof data.sections);
+    setCourseInfo(data);
+    setLoading(false);
   }
   useEffect(() => {
-    getCourseInfo();
+    (async () => {
+      await functions.kickOut();
+      getCourseInfo();
+    })();
   }, []);
   return (
     <>
-      <div className="section1">
-        <Navbar
-          one={{
-            function: () => {
-              document.cookie =
-                "Email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              document.cookie =
-                "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-              window.location = "/login";
-            },
-            text: "Logout",
-          }}
-          two={{
-            function: () => {
-              window.location = "/dashboard";
-            },
-            text: "Dashboard",
-          }}
-        />
-        <h1 className="hoverable" style={{ margin: "2rem" }}>
-          {courseInfo.hook}
-        </h1>
-        <div className="hero">
-          <div style={{ flex: "1 1 400px" }}>
-            <img
-              src={courseInfo.image}
-              className="hoverable"
-              style={{
-                width: "90%",
-                maxWidth: "650px",
-                maxHeight: "650px",
-                margin: "1rem",
-              }}
-            />
-          </div>
-          <div style={{ flex: "1 1 550px" }}>
-            <h1 className="hoverable">{courseInfo.title}</h1>
-            <h2 className="hoverable">{courseInfo.description}</h2>
-          </div>
-        </div>
-      </div>
-      <div className="section2">
-        <div className="hero">
-          <div style={{ flex: "1 1 100%" }} className="hoverable">
-            <h1 style={{ padding: "0rem", margin: "0rem 1rem" }}>
-              Why should I learn {courseInfo.language}?
-            </h1>
-          </div>
-          {courseInfo.reasonsToLearn}
-        </div>
-      </div>
-      <div className="section1">
-        <div className="hero">
-          <div style={{ flex: "1 1 100%" }} className="hoverable">
-            <h1 style={{ marginBottom: "0rem" }}>Our Curriculum.</h1>
-          </div>
-          <div
-            style={{ flex: "1 1 100%", paddingTom: "0rem", marginTom: "0rem" }}
-          >
-            <h2 className="hoverable">{courseInfo.curriculum}</h2>
-          </div>
-          <div>
-            <div style={{ flex: "1 1 100%" }}>
-              <div className="lessons">{courseInfo.sections}</div>
+      <DashboardNavbar
+        one={{
+          function: () => {
+            document.cookie =
+              "Email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie =
+              "sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location = "/login";
+          },
+          text: "Logout",
+        }}
+        two={{
+          function: () => {
+            window.location = "/dashboard";
+          },
+          text: "Dashboard",
+        }}
+      />
+      {loading === true ? (
+        <FontAwesomeIcon className="spinner" icon={faSpinner} spin />
+      ) : (
+        <>
+          <div className={styles.hero}>
+            <div className={styles.heroContent}>
+              <h1>{courseInfo.title}</h1>
+              <p>{courseInfo.description}</p>
             </div>
           </div>
-        </div>
-        <Footer />
-      </div>
+          <div className={styles.courseContent}>
+            <h1 className={styles.aboutTitle}>About our Course</h1>
+            <h2 className={styles.about}>{courseInfo.about}</h2>
+            {courseInfo.sections.map((section) => {
+              console.log(section, images);
+              return (
+                <>
+                  <div className={styles.section} key={section.ref}>
+                    <div className={styles.sectionImage}>
+                      <img
+                        src={images[courseName].sectionImages[section.img]}
+                      ></img>
+                    </div>
+                    <div className={styles.sectionDescription}>
+                      <h1>{section.title}</h1>
+                      <h2>{section.description}</h2>
+                      <button
+                        onClick={() => {
+                          window.location = `/section/${courseName}/${section.ref}`;
+                        }}
+                      >
+                        Go to section
+                      </button>
+                    </div>
+                  </div>
+                </>
+              );
+            })}
+          </div>
+          <Footer />
+        </>
+      )}
     </>
   );
 }

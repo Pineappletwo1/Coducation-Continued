@@ -232,13 +232,11 @@ body {
 }
 
 footer {
-  box-sizing: border-box;
   margin-top: 2rem;
-  background-color: var(--navBgColor);
-  display: flex;
-  width: 100%;
-  padding: 0.7rem 0 0.7rem 0;
-  justify-content: center;
+  background-color: var(--primary);
+  padding: 1rem;
+  text-align: center;
+  color: var(--lightWhite);
 }
 
 .footerAbsolute {
