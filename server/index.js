@@ -291,29 +291,87 @@ app.post("/lessons", (req, res) => {
       break; // Don't forget to include a break statement here
     case "courseInfo":
       {
-        res.send({
-          description: lessons[req.body.course].intro.description,
-          title: lessons[req.body.course].title,
-          image: lessons[req.body.course].intro.imageSrc,
-          shortDescription: lessons[req.body.course].shortDescription,
-          about: lessons[req.body.course].intro.about,
-          sections: Object.keys(lessons[req.body.course].intro.sections).map(
-            (key) => ({
-              title: lessons[req.body.course].intro.sections[key].title,
-              description:
-                lessons[req.body.course].intro.sections[key].description,
-              ref: lessons[req.body.course].intro.sections[key].ref,
-              img: lessons[req.body.course].intro.sections[key].image,
-            })
-          ),
-        });
+        try {
+          res.send({
+            description: lessons[req.body.course].intro.description,
+            title: lessons[req.body.course].title,
+            image: lessons[req.body.course].intro.imageSrc,
+            shortDescription: lessons[req.body.course].shortDescription,
+            about: lessons[req.body.course].intro.about,
+            sections: Object.keys(lessons[req.body.course].intro.sections).map(
+              (key) => ({
+                title: lessons[req.body.course].intro.sections[key].title,
+                description:
+                  lessons[req.body.course].intro.sections[key].description,
+                ref: lessons[req.body.course].intro.sections[key].ref,
+                img: lessons[req.body.course].intro.sections[key].image,
+              })
+            ),
+          });
+        } catch (e) {
+          res.send({ error: "something went wrong" });
+        }
       }
       break;
     case "sectionInfo":
       {
-        res.send({
-          info: lessons[req.body.courseName].intro.sections[req.body.section],
-        });
+        try {
+          const section =
+            lessons[req.body.courseName].intro.sections[req.body.section];
+          res.send({
+            info: {
+              ...section,
+              units: section.units.map((unit) => ({
+                title: unit.title,
+                description: unit.description,
+                ref: unit.ref,
+              })),
+            },
+          });
+        } catch (e) {
+          res.send({ error: "something went wrong" });
+        }
+      }
+      break;
+    case "unitInfo":
+      {
+        try {
+          const unit = lessons[req.body.courseName].intro.sections[
+            req.body.section
+          ].units.find((unit) => unit.ref == req.body.unitName);
+          res.send({
+            info: {
+              ...unit,
+              lessons: unit.lessons.map((lesson) => ({
+                title: lesson.title,
+                description: lesson.description,
+                ref: lesson.ref,
+              })),
+            },
+          });
+        } catch (e) {
+          res.send({
+            error: "something went wrong",
+          });
+        }
+      }
+      break;
+    case "lessonInfo":
+      {
+        try {
+          const lesson = lessons[req.body.courseName].intro.sections[
+            req.body.section
+          ].units
+            .find((unit) => unit.ref == req.body.unitName)
+            .lessons.find((lesson) => lesson.ref == req.body.lessonName);
+          res.send({
+            lesson,
+          });
+        } catch (e) {
+          res.send({
+            error: "something went wrong",
+          });
+        }
       }
       break;
     default:

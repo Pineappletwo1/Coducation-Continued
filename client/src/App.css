@@ -2,7 +2,7 @@
 
 :root {
   --lightWhite: #f0f0f0;
-  --lightGrey: #d5d5d5;
+  --lightGrey: #dddddd;
   --primary: #021934;
   --lightPrimary: #031f3f;
   --secondary: #fcc84e;
@@ -250,4 +250,23 @@ footer {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 5rem;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading > h1 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.loading > img {
+  width: 10rem;
 }

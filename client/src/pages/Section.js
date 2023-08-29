@@ -25,8 +25,11 @@ export default function Section() {
       }),
     });
     const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+      return (window.location = "/dashboard");
+    }
     setSectionInfo(data.info);
-    console.log(data);
     setLoading(false);
   }
   useEffect(() => {
@@ -80,22 +83,21 @@ export default function Section() {
               {sectionInfo.units.map((item, index) => {
                 return (
                   <div className={styles.unit} key={index}>
-                    <div className={styles.unitText}>
-                      <h1>{item.title}</h1>
-                      <p>{item.description}</p>
-                      <button
-                        onClick={() => {
-                          window.location = `/dashboard/${courseName}/${sectionName}/${item.name}`;
-                        }}
-                      >
-                        Start
-                      </button>
-                    </div>
+                    <h1>{item.title}</h1>
+                    <p>{item.description}</p>
+                    <button
+                      onClick={() => {
+                        window.location = `/unit/${courseName}/${sectionName}/${item.ref}`;
+                      }}
+                    >
+                      Start
+                    </button>
                   </div>
                 );
               })}
             </div>
           </div>
+          <Footer />
         </>
       )}
     </>

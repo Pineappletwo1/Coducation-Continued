@@ -1,5 +1,9 @@
-module.exports = {
-  "What is JavaScript?": {
+module.exports = [
+  {
+    ref: "whatIsJavaScript",
+    title: "What is JavaScript?",
+    description:
+      "Learn about the basics of JavaScript, its history, and its role in web development.",
     questions: [
       {
         ref: "question1",
@@ -47,7 +51,11 @@ module.exports = {
       },
     ],
   },
-  "JavaScript in Web Development": {
+  {
+    ref: "javascriptInWebDevelopment",
+    title: "JavaScript in Web Development",
+    description:
+      "Explore how JavaScript fits into the broader landscape of web development.",
     content: [
       {
         type: "paragraph",
@@ -83,7 +91,11 @@ module.exports = {
       },
     ],
   },
-  "Setting Up a JavaScript Development Environment": {
+  {
+    ref: "settingUpJavaScriptEnvironment",
+    title: "Setting Up a JavaScript Development Environment",
+    description:
+      "Guide to setting up a JavaScript development environment to start building web applications.",
     content: [
       {
         type: "paragraph",
@@ -124,4 +136,4 @@ module.exports = {
       },
     ],
   },
-};
+];

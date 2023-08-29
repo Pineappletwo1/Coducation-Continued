@@ -21,7 +21,10 @@ export default function Course() {
       body: JSON.stringify({ info: "courseInfo", course: courseName }),
     });
     const data = await res.json();
-    console.log(data.sections, typeof data.sections);
+    if (data.error) {
+      alert(data.error);
+      return (window.location = "/dashboard");
+    }
     setCourseInfo(data);
     setLoading(false);
   }
