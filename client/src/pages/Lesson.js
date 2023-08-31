@@ -14,6 +14,35 @@ export default function Lesson() {
   const { courseName, sectionName, unitName, lessonName } = useParams();
   const [lessonInfo, setLessonInfo] = useState({});
   const [loading, setLoading] = useState(true);
+  const [quiz, setQuiz] = useState({});
+  function handleChange(e) {
+    setQuiz({
+      ...quiz,
+      [e.target.name]: e.target.value,
+    });
+  }
+  async function submit(e) {
+    e.preventDefault();
+    console.log(quiz);
+    const res = await fetch(
+      `/quiz/${courseName}/${sectionName}/${unitName}/${lessonName}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(quiz),
+      }
+    );
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else if (data.talley || data.talley === 0) {
+      alert(
+        `You got ${data.talley} out of ${lessonInfo.questions.length} correct!`
+      );
+    }
+  }
   async function getLessonData() {
     const res = await fetch("/lessons", {
       method: "POST",
@@ -87,7 +116,7 @@ export default function Lesson() {
                 } else if (section.type == "image") {
                   return (
                     <>
-                      <img className={styles.image} src={section.content} />,
+                      <img className={styles.image} src={section.content} />
                       <div className={styles.codeComment}>
                         {section.description}
                       </div>
@@ -104,6 +133,42 @@ export default function Lesson() {
                   );
                 }
               })}
+              <form
+                action={`/quiz/${courseName}/${sectionName}/${unitName}/${lessonName}`}
+                method="POST"
+                onSubmit={submit}
+              >
+                {lessonInfo.questions &&
+                  lessonInfo.questions.map((question) => {
+                    return (
+                      <>
+                        <div
+                          className={styles.question}
+                          key={question.question}
+                        >
+                          <h3>{question.question}</h3>
+                          {question.options.map((option) => {
+                            return (
+                              <div className={styles.option}>
+                                <input
+                                  type="radio"
+                                  name={question.question}
+                                  value={option}
+                                  onChange={handleChange}
+                                  key={option}
+                                />
+                                <label>{option}</label>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    );
+                  })}
+                <button className={styles.submit} type="submit">
+                  Submit
+                </button>
+              </form>
             </div>
           </div>
           <Footer />

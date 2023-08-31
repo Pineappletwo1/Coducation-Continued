@@ -407,3 +407,24 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+
+app.post("/quiz/:courseName/:sectionName/:unitName/:lessonName", (req, res) => {
+  const { courseName, sectionName, unitName, lessonName } = req.params;
+  try {
+    const lesson = lessons[courseName].intro.sections[sectionName].units
+      .find((unit) => unit.ref == unitName)
+      .lessons.find((lesson) => lesson.ref == lessonName);
+    const { questions } = lesson;
+    let talley = 0;
+    questions.forEach((question) => {
+      if (question.options[question.solution] === req.body[question.question]) {
+        talley++;
+      }
+    });
+    res.send({ talley });
+  } catch (e) {
+    res.send({
+      error: "something went wrong",
+    });
+  }
+});
