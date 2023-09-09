@@ -45,6 +45,7 @@
   padding: 1rem;
   background: var(--lightGrey);
   position: relative;
+  margin-top: 1rem;
 }
 
 .option > input[type="radio"] {
