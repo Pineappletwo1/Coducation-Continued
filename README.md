@@ -2,4 +2,4 @@
 
 :warning:OLD VERSION WILL NOT WORK, PLEASE USE THIS REPO INSTEAD
 
-~~fixing sh*t I created~~  
+~~fixing sh*t me and my friend created~~  
